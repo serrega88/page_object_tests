@@ -7,7 +7,7 @@ class MainPageLocators():
 class LoginPageLocators():
     LOGIN_USERNAME = (By.ID, "id_login-username")
     LOGIN_PASSWORD = (By.ID, "id_login-password")
-    LOGIN_RESET = (By.LINK_TEXT, "Я забыл пароль")
+    LOGIN_RESET = (By.CSS_SELECTOR, "#login_form p a")
     LOGIN_SUBMIT = (By.NAME, "login_submit")
 
     REGISTRATION_USERNAME = (By.ID, "id_registration-email")
