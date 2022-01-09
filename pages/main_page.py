@@ -1,6 +1,5 @@
 from page_object_tests.pages.base_page import BasePage
 from page_object_tests.pages.locators import MainPageLocators
-from page_object_tests.pages.login_page import LoginPage
 
 
 class MainPage(BasePage):
