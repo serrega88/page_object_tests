@@ -23,3 +23,12 @@ class ProductPage(BasePage):
         product_price = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
         product_price_message = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_MESSAGE).text
         assert product_price == product_price_message, "Wrong product price in the basket"
+
+    def should_not_be_success_message_after_adding_product_to_basket(self):
+        assert self.is_not_element_present(*ProductPageLocators.FIRST_SUCCESS_MESSAGE), "First success message about the product adding to the basket is presented after adding product to the basket, but should not be"
+
+    def should_not_be_success_message_after_opening_of_page(self):
+        assert self.is_not_element_present(*ProductPageLocators.FIRST_SUCCESS_MESSAGE), "First success message about the product adding to the basket is presented after the page opening, but should not be"
+
+    def success_message_should_be_disappeared_after_adding_product_to_basket(self):
+        assert self.is_disappeared(*ProductPageLocators.FIRST_SUCCESS_MESSAGE), "First success message about the product adding to the basket is not disappiered, but should be"
