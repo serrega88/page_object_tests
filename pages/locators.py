@@ -26,5 +26,6 @@ class ProductPageLocators():
     PRODUCT_PRICE_MESSAGE = (By.CSS_SELECTOR, "#messages .alert:nth-child(3) strong")
 
 class BasketPageLocators():
-    PRODUCTS_BLOCK = (By.CSS_SELECTOR, ".basket-title")
+    PRODUCTS_BLOCK = (By.CSS_SELECTOR, "#basket_formset")
     EMPTY_BASKET_MESSAGE = (By.CSS_SELECTOR, "#content_inner>p>a")
+

@@ -12,8 +12,14 @@ class BasketPage(BasePage):
         current_url = self.browser.current_url
         assert "basket" in current_url, "This is not the url of the basket page"
 
+    def basket_page_is_full(self):
+        assert self.is_element_present(*BasketPageLocators.PRODUCTS_BLOCK), "Basket page is empty, but should be full"
+
     def basket_page_is_empty(self):
-        self.is_not_element_present(*BasketPageLocators.PRODUCTS_BLOCK)
+        assert self.is_not_element_present(*BasketPageLocators.PRODUCTS_BLOCK), "Basket page is full, but should be empty"
 
     def is_present_empty_basket_message(self):
-        self.is_element_present(*BasketPageLocators.EMPTY_BASKET_MESSAGE)
+        assert self.is_element_present(*BasketPageLocators.EMPTY_BASKET_MESSAGE), "There is not an empty basket message, but should be"
+
+    def is_not_present_empty_basket_message(self):
+        assert self.is_not_element_present(*BasketPageLocators.EMPTY_BASKET_MESSAGE), "There is an empty basket message, but should not be"

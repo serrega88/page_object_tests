@@ -1,3 +1,5 @@
+import pytest
+
 from page_object_tests.pages.basket_page import BasketPage
 from page_object_tests.pages.login_page import LoginPage
 from page_object_tests.pages.main_page import MainPage
@@ -28,3 +30,25 @@ def test_guest_cant_see_product_in_basket_opened_from_main_page(browser):
     basket_page.basket_page_is_empty()
     basket_page.is_present_empty_basket_message()
 
+# Негативные проверки
+
+# проверки на то, что гость видит товары, добавленные в корзину, хотя не добовлял их
+@pytest.mark.xfail(reason="Negative test")
+def test_guest_can_see_product_in_basket_opened_from_product_page_without_product_adding(browser):
+    link = "http://selenium1py.pythonanywhere.com/"
+    page = MainPage(browser, link)
+    page.open()
+    page.go_to_basket_page()
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.should_be_basket_page()
+    basket_page.basket_page_is_full()
+
+@pytest.mark.xfail(reason="Negative test")
+def test_guest_can_see_empty_basket_message_in_basket_opened_from_product_page_without_product_adding(browser):
+    link = "http://selenium1py.pythonanywhere.com/"
+    page = MainPage(browser, link)
+    page.open()
+    page.go_to_basket_page()
+    basket_page = BasketPage(browser, browser.current_url)
+    basket_page.should_be_basket_page()
+    basket_page.is_not_present_empty_basket_message()
