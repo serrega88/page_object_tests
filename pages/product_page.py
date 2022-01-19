@@ -8,7 +8,7 @@ class ProductPage(BasePage):
 
     def should_be_product_url(self):
         current_url = self.browser.current_url
-        assert "?promo=newYear" in current_url, "This is not the url of the product page"
+        assert "?promo=" in current_url, "This is not the url of the product page"
 
     def add_to_basket(self):
         basket_button = self.browser.find_element(*ProductPageLocators.ADD_TO_BASKET)

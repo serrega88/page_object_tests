@@ -1,6 +1,44 @@
+import time
+from faker import Faker
 import pytest
 from page_object_tests.pages.basket_page import BasketPage
+from page_object_tests.pages.login_page import LoginPage
 from page_object_tests.pages.product_page import ProductPage
+
+@pytest.mark.product_adding
+class TestUserAddToBasketFromProductPage():
+
+    @pytest.fixture(scope="function", autouse = True)
+    def setup(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        fake = Faker()
+        page.open()
+        page.go_to_login_page()
+        login_page = LoginPage(browser, browser.current_url)
+        login_page.should_be_login_page()
+        login_page.register_new_user(fake.email(), "dsaw56789")
+        login_page.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        page.open()
+        # отсутствует первое по счету сообщение об успешном добавлении товара в корзину после открытия страницы
+        page.should_not_be_success_message_after_opening_of_page()
+
+    @pytest.mark.need_review
+    def test_user_can_add_product_to_basket(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
+        page = ProductPage(browser, link)
+        page.open()
+        page.should_be_product_page()
+        page.add_to_basket()
+        # посчитать результат математического выражения
+        page.solve_quiz_and_get_code()
+        # товар добавлен в корзину
+        page.check_product_name_in_basket()
+        page.check_product_price_in_basket()
 
 
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
@@ -13,13 +51,12 @@ from page_object_tests.pages.product_page import ProductPage
                                   pytest.param("http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7", marks=pytest.mark.xfail(reason="Bugged link")),
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
+@pytest.mark.need_review
 def test_guest_can_add_product_to_basket(browser, link):
     # открыть страницу продукта
     page = ProductPage(browser, link)
     page.open()
-    # страница продукта открыта
-    #page.should_be_product_page()
-    # нажать кнопку Добавить в корзину
+    page.should_be_product_page()
     page.add_to_basket()
     # посчитать результат математического выражения
     page.solve_quiz_and_get_code()
@@ -31,18 +68,23 @@ def test_guest_should_see_login_link_on_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     page.should_be_login_link()
 
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     page.go_to_login_page()
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     page.go_to_basket_page()
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_be_basket_page()
@@ -58,6 +100,7 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     # нажать кнопку Добавить в корзину
     page.add_to_basket()
     # посчитать результат математического выражения
@@ -69,6 +112,7 @@ def test_guest_cant_see_success_message(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     #отсутствует первое по счету сообщение об успешном добавлении товара в корзину после открытия страницы
     page.should_not_be_success_message_after_opening_of_page()
 
@@ -77,6 +121,7 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     # нажать кнопку Добавить в корзину
     page.add_to_basket()
     # посчитать результат математического выражения
@@ -90,6 +135,7 @@ def test_guest_can_see_product_in_basket_opened_from_product_page_without_produc
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     page.go_to_basket_page()
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_be_basket_page()
@@ -100,6 +146,7 @@ def test_guest_can_see_empty_basket_message_in_basket_opened_from_product_page_w
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
     page = ProductPage(browser, link)
     page.open()
+    page.should_be_product_page()
     page.go_to_basket_page()
     basket_page = BasketPage(browser, browser.current_url)
     basket_page.should_be_basket_page()

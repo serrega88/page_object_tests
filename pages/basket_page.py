@@ -8,7 +8,6 @@ class BasketPage(BasePage):
         self.should_be_basket_url()
 
     def should_be_basket_url(self):
-        # реализуйте проверку на корректный url адрес
         current_url = self.browser.current_url
         assert "basket" in current_url, "This is not the url of the basket page"
 
